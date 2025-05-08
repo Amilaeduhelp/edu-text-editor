@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduHelp - විශ්ව අධ්‍යාපනික අත්වැල</title>
+    
+    <!-- Include TinyMCE from CDN with API key -->
+    <script src="https://cdn.tiny.cloud/1/se4oaviln3luts7h9lsnadubrkg7z3839jv4s9vir2ox6anq/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <!-- Include jsPDF library from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Header Styles */
+        .header-container {
+            width: 100%;
+            background-color: #8cc63f; /* Green color from the image */
+            padding: 0;
+            margin: 0;
+        }
+        
+        .top-bar {
+            background-color: #8cc63f;
+            height: 30px;
+            width: 100%;
+        }
+        
+        .main-header {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #fff;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-container img {
+            height: 60px;
+        }
+        
+        .logo-text {
+            font-size: 14px;
+            color: #333;
+            margin-left: 5px;
+        }
+        
+        /* Navigation Styles - UPDATED */
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .main-nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+        
+        .nav-item {
+            margin: 0;
+            position: relative;
+        }
+        
+        .nav-link {
+            display: block;
+            padding: 15px 20px;
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background-color 0.3s;
+            border-radius: 20px;
+            margin: 0 5px;
+            background-color: transparent; /* Default background is transparent */
+        }
+        
+        .nav-link:hover {
+            background-color: #8cc63f;
+            color: #fff;
+        }
+        
+       
+        
+        /* Editor Styles */
+        .editor-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        
+        #editor {
+            margin-bottom: 20px;
+            min-height: 400px;
+        }
+        
+        .button-container {
+            margin: 20px 0;
+        }
+        
+        button {
+            background-color: #8cc63f;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin-right: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            background-color: #7ab235;
+        }
+        
+        /* Voice Recognition Styles */
+        .voice-typing-container {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .mic-button {
+            display: inline-flex;
+            align-items: center;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .mic-button:hover {
+            background-color: #c0392b;
+        }
+        
+        .mic-button.recording {
+            background-color: #c0392b;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        
+        .mic-icon {
+            margin-right: 8px;
+            width: 18px;
+            height: 18px;
+        }
+        
+        .lang-selector {
+            padding: 8px;
+            margin-left: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with green top bar -->
+    <div class="header-container">
+        <div class="top-bar"></div>
+    </div>
+    
+    <!-- Main header with logo -->
+    <div class="main-header">
+        <div class="logo-container">
+            <img src="https://www.eduhelp.lk/wp-content/uploads/2025/05/EduhelpLogo_2023-01.jpg" alt="EduHelp Logo">
+            </div>
+    </div>
+    
+    <!-- Navigation -->
+    <nav class="nav-container">
+        <ul class="main-nav">
+            <li class="nav-item"><a href="https://www.eduhelp.lk/" class="nav-link active-link">මුල පිටුව</a></li>
+            <li class="nav-item"><a href="https://www.eduhelp.lk/index.php/news/" class="nav-link">පුවත්</a></li>
+            <li class="nav-item"><a href="https://www.eduhelp.lk/index.php/educational-services/" class="nav-link">අධ්‍යාපන සේවා</a></li>
+            <li class="nav-item"><a href="https://www.eduhelp.lk/index.php/encyclopedia/" class="nav-link">විශ්වකෝෂය</a></li>
+            <li class="nav-item"><a href="https://www.eduhelp.lk/index.php/image-bank/" class="nav-link">පින්තූර</a></li>
+            <li class="nav-item"><a href="https://www.eduhelp.lk/index.php/library/" class="nav-link">පුස්තකාලය</a></li>
+            <li class="nav-item"><a href="https://www.eduhelp.lk/index.php/universal-index/" class="nav-link">විශ්ව සුචිය</a></li>
+            <li class="nav-item"><a href="https://www.eduhelp.lk/index.php/contact/" class="nav-link">විමසීම්</a></li>
+            <li class="nav-item"><a href="https://www.eduhelp.lk/index.php/events/" class="nav-link">විශේෂ අවස්ථා</a></li>
+        </ul>
+    </nav>
+    
+    <div class="editor-container">
+        <h1>eduhelp-text editor</h1>
+        
+        <!-- Voice typing section -->
+        <div class="voice-typing-container">
+            <h3>Real-time Voice Typing</h3>
+            <p>Click the microphone button and start speaking to type with your voice.</p>
+            <button id="micButton" class="mic-button">
+                <svg class="mic-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"></path>
+                    <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"></path>
+                </svg>
+                Start Voice Typing
+            </button>
+            <select id="langSelector" class="lang-selector">
+                <option value="si-LK">සිංහල (Sinhala)</option>
+                <option value="en-US">English (US)</option>
+                <option value="ta-LK">தமிழ் (Tamil)</option>
+            </select>
+            <p id="statusText">Voice recognition is ready.</p>
+        </div>
+        
+        <!-- Text area that will be replaced by the TinyMCE editor -->
+        <textarea id="editor" name="content"></textarea>
+        
+        <!-- Buttons to save content -->
+        <div class="button-container">
+            <button id="saveTxt">Save as .txt</button>
+            <button id="savePdf">Save as PDF</button>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize TinyMCE editor
+            tinymce.init({
+                selector: '#editor',
+                height: 600,
+                menubar: true,
+                plugins: 'print preview importcss searchreplace autolink directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons',
+                toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent | numlist bullist checklist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen preview save print | insertfile image media template link anchor codesample | ltr rtl',
+                toolbar_sticky: true,
+                toolbar_mode: 'sliding',
+                content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                directionality: 'ltr'
+            });
+            
+            // Function to save text as .txt file
+            document.getElementById('saveTxt').addEventListener('click', function() {
+                const content = tinymce.get('editor').getContent({format: 'text'});
+                const blob = new Blob([content], {type: 'text/plain;charset=utf-8'});
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'document.txt';
+                link.click();
+            });
+            
+            // Function to save content as PDF
+            document.getElementById('savePdf').addEventListener('click', function() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                const content = tinymce.get('editor').getContent({format: 'text'});
+                doc.text(content, 10, 10);
+                doc.save('document.pdf');
+            });
+            
+            // Voice typing functionality
+            const micButton = document.getElementById('micButton');
+            const langSelector = document.getElementById('langSelector');
+            const statusText = document.getElementById('statusText');
+            let recognition;
+            let isRecording = false;
+            
+            // Check if browser supports SpeechRecognition
+            if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRecognition();
+                
+                // Configure speech recognition
+                recognition.continuous = true;
+                recognition.interimResults = true;
+                recognition.lang = langSelector.value;
+                
+                // Event when results are available
+                recognition.onresult = function(event) {
+                    const transcript = Array.from(event.results)
+                        .map(result => result[0])
+                        .map(result => result.transcript)
+                        .join('');
+                    
+                    if (event.results[0].isFinal) {
+                        // Insert transcribed text into TinyMCE
+                        tinymce.get('editor').insertContent(transcript + ' ');
+                    }
+                };
+                
+                // Event when recognition ends
+                recognition.onend = function() {
+                    if (isRecording) {
+                        recognition.start(); // Restart if it was still supposed to be recording
+                    } else {
+                        micButton.classList.remove('recording');
+                        micButton.innerHTML = `
+                            <svg class="mic-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"></path>
+                                <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"></path>
+                            </svg>
+                            Start Voice Typing
+                        `;
+                        statusText.textContent = 'Voice recognition stopped.';
+                    }
+                };
+                
+                // Event when error occurs
+                recognition.onerror = function(event) {
+                    console.error('Speech recognition error', event.error);
+                    statusText.textContent = `Error: ${event.error}`;
+                    isRecording = false;
+                    micButton.classList.remove('recording');
+                    micButton.innerHTML = `
+                        <svg class="mic-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"></path>
+                            <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"></path>
+                        </svg>
+                        Start Voice Typing
+                    `;
+                };
+                
+                // Toggle recording when mic button is clicked
+                micButton.addEventListener('click', function() {
+                    if (!isRecording) {
+                        // Start recording
+                        recognition.lang = langSelector.value;
+                        recognition.start();
+                        isRecording = true;
+                        micButton.classList.add('recording');
+                        micButton.innerHTML = `
+                            <svg class="mic-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"></path>
+                                <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"></path>
+                            </svg>
+                            Stop Voice Typing
+                        `;
+                        statusText.textContent = 'Listening...';
+                    } else {
+                        // Stop recording
+                        recognition.stop();
+                        isRecording = false;
+                    }
+                });
+                
+                // Change language when selector changes
+                langSelector.addEventListener('change', function() {
+                    if (isRecording) {
+                        recognition.stop();
+                        recognition.lang = langSelector.value;
+                        recognition.start();
+                    } else {
+                        recognition.lang = langSelector.value;
+                    }
+                });
+                
+            } else {
+                // Browser doesn't support SpeechRecognition
+                micButton.disabled = true;
+                statusText.textContent = 'Voice recognition is not supported in this browser. Try Chrome or Edge.';
+            }
+        });
+    </script>
+</body>
+</html>
